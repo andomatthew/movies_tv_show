@@ -25,7 +25,7 @@ const Navbar = () => {
                     </li>
                 </ul>
                 <form className='d-flex'>
-                    <input className='form-control me-2' type='search' placeholder={`Titles, Genres`} aria-labels="Search" />
+                    <input className='form-control me-2' type='search' placeholder={`Titles, Genres`} aria-label="Search" />
                 </form>
             </div>
         </div>
