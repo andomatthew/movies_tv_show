@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
 import fetchDataMovies from '../utils/fetchMovies'
+import Card from '../components/Card'
 
-const Movie = ({ search, setSearch }) => {
+const Movie = ({ myList, setMyList, addMyList, removeFromMyList }) => {
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -10,9 +11,8 @@ const Movie = ({ search, setSearch }) => {
   const [upcoming, setUpcoming] = useState([])
   const [topRated, setTopRated] = useState([])
   const [nowPlaying, setNowPlaying] = useState([])
-  const [movieSearched, setMovieSearched] = useState([])
 
-  async function fetchMovies(url, categories, api_key) {
+  async function fetchMovies() {
 
     setLoading(true)
 
@@ -33,13 +33,6 @@ const Movie = ({ search, setSearch }) => {
         setTopRated(result.jsonTopRated.results)
         setNowPlaying(result.jsonNowPlaying.results)
 
-        // if(search !== undefined && search.length > 0) {
-        //   searchAll()
-        // }
-
-        // if(search !== undefined && search.length === 0) {
-        //   setMovieSearched([])
-        // }
       } 
       setLoading(false)
 
@@ -48,29 +41,11 @@ const Movie = ({ search, setSearch }) => {
     }
   }
 
-  // function searchAll() {
-  //   let test = []
-  //   let results = [] 
-    
-  //   test.push(popular.filter(item => item.title.toLowerCase().includes(search)))
-  //   test.push(upcoming.filter(item => item.title.toLowerCase().includes(search)))
-  //   test.push(topRated.filter(item => item.title.toLowerCase().includes(search)))
-  //   test.push(nowPlaying.filter(item => item.title.toLowerCase().includes(search)))
-
-  //   test.forEach(items => items.forEach(item => results.push(item)))
-
-  //   setMovieSearched(results)
-  // }
-
   useEffect(() => {
-    let isMounted = true
     
     fetchMovies()
         
-    return function cleanup() {
-      isMounted = false
-    }
-  }, [search])
+  }, [])
 
   if (error) {
     return <div>Error: {error}</div>
@@ -79,68 +54,65 @@ const Movie = ({ search, setSearch }) => {
   if(loading) {
     return <div>Loading...</div>
   }
-  
-  if(movieSearched.length >= 1) {
-    return (
-      <div>
-        <div className='row'>
-          <div className='col-3'>
-            <h1>Movie Search Result</h1>
-            <ul>
-              {movieSearched.map(item => (
-                  <li key={item.id}>
-                    {`${item.id} ${item.title} ${item.release_date}`}
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
-    <div>
-      <div className='row'>
-        <div className='col-3'>
-          <h1>Upcoming Movies</h1>
-          <ul>
-            { upcoming.map(item => (
-              <li key={item.id}>
-              { `${item.id} ${item.title} ${item.release_date}`}
-              </li>
-              ))
-            }
-          </ul>
-        </div>
-        <div className='col-3'>
-          <h1>Popular Movies</h1>
-          <ul>
-              { popular.map(item => (
-                  <li key={item.id}>{`${item.id} ${item.title} ${item.release_date}` }</li>
-                ))
-              }
-          </ul>
-        </div>
-        <div className='col-3'>
-            <h1>Top Rated Movies</h1>
-            <ul>
-              { topRated.map(item => (
-                  <li key={item.id}>{`${item.id} ${item.title} ${item.release_date}`}</li>
-                ))
-              }
-            </ul>
-        </div>
-        <div className='col-3'>
-            <h1>Now Playing Movies</h1>
-            <ul>
-              { nowPlaying.map(item => (
-                  <li key={item.id}>{`${item.id} ${item.title} ${item.release_date}`}</li>
-                ))
-              }
-            </ul>
-        </div>
+    <div className='container-fluid mt-5'>
+      <h1>Movies</h1>
+      <div className='row justify-content-center'>
+        <h1 className='text-center'>Upcoming</h1>
+          { upcoming.map((item) => (
+              <Card 
+                key={item.id}
+                data={item}
+                myList={myList}
+                setMyList={setMyList}
+                removeFromMyList={removeFromMyList}
+                addMyList={addMyList}
+              />
+            ))
+          }
+      </div>
+      <div className='row justify-content-center mt-5'>
+        <h1 className='text-center'>Popular</h1>
+        { popular.map(item => (
+            <Card 
+              key={item.id}
+              data={item}
+              myList={myList}
+              setMyList={setMyList}
+              removeFromMyList={removeFromMyList}
+              addMyList={addMyList}
+            />
+          ))
+        }
+      </div>
+      <div className='row justify-content-center mt-5'>
+        <h1 className='text-center'>Top Rated</h1>
+          { topRated.map(item => (
+              <Card 
+                key={item.id}
+                data={item}
+                myList={myList}
+                setMyList={setMyList}
+                removeFromMyList={removeFromMyList}
+                addMyList={addMyList}
+            />
+            ))
+          }
+      </div>
+      <div className='row justify-content-center mt-5'>
+        <h1 className='text-center'> Now Playing</h1>
+          { nowPlaying.map(item => (
+            <Card 
+              key={item.id}
+              data={item}
+              myList={myList}
+              setMyList={setMyList}
+              removeFromMyList={removeFromMyList}
+              addMyList={addMyList}
+            />
+            ))
+          }
       </div>
     </div>
   )

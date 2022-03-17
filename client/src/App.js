@@ -11,16 +11,28 @@ import MyList from './containers/MyList';
 function App() {
 
   const [search, setSearch] = useState('')
+  const [myList, setMyList] = useState([])
+
+  function addMyList(item) {
+
+    setMyList([...myList, item])
+  }
+
+  function removeFromMyList(item) {
+
+    setMyList(myList.filter(i => i.id !== item.id))
+
+  }
 
   return (
     <div className="App">
       <Navbar search={search} setSearch={setSearch} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/movies" element={<Movie />} />
-        <Route path="/tv-shows" element={<TvShow />} />
-        <Route path="/my-list" element={<MyList />} />
-        <Route path="/search" element={<Search search={search} setSearch={setSearch} />} />
+        <Route path="/" element={<Home myList={myList} setMyList={setMyList} />} />
+        <Route path="/movies" element={<Movie myList={myList} setMyList={setMyList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/tv-shows" element={<TvShow myList={myList} setMyList={setMyList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/my-list" element={<MyList myList={myList} setMyList={setMyList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/search" element={<Search myList={myList} setMyList={setMyList} search={search} setSearch={setSearch} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
       </Routes>
     </div>
   );

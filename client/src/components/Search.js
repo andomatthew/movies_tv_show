@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import fetchDataMovies from '../utils/fetchMovies'
 import fetchDataTvShow from '../utils/fetchTvShow'
 
-const Search = ({ search, setSearch }) => {
+import Card from './Card'
+
+const Search = ({ search, setSearch,myList, setMyList, addMyList, removeFromMyList }) => {
     
 
     const [movies, setMovies] = useState([])
@@ -13,7 +15,6 @@ const Search = ({ search, setSearch }) => {
     const navigate = useNavigate()
 
     async function fetchAllData() {
-
         let moviesResult = []
         let tvShowResult = []
 
@@ -80,36 +81,46 @@ const Search = ({ search, setSearch }) => {
 
 
     }
-
     useEffect(() => {
-        fetchAllData()
+        let isMounted = true
 
-        if(search.length === 0) {
-            navigate('/')
+        if(isMounted) {
+            fetchAllData()
+            if(search.length === 0) {
+                navigate('/')
+            }
         }
-
+        return () => { isMounted = false }
     }, [search])
 
     return (
-    <div>
+    <div className='container-fluid mt-5'>
         <h1>Searched Data Movies</h1>
-        <div className='row'>
-            <div className='col-6'>
-                <ul>
-                    { movies.map(movie => (
-                            <li key={movie.id}>{`${movie.id} ${movie.title} ${movie.release_date}`}</li>    
-                        ))
-                    }
-                </ul>
-            </div>
-            <div className='col-6'>
-                    <ul>
-                        { tvShows.map(tvShow => (
-                            <li key={tvShow.id}>{`${tvShow.id} ${tvShow.name} ${tvShow.first_air_date}`}</li>
-                            ))
-                        }
-                    </ul>
-            </div>
+        <div className='row justify-content-center'>
+            { movies.map(item => (
+                <Card 
+                key={item.id}
+                data={item}
+                myList={myList}
+                setMyList={setMyList}
+                removeFromMyList={removeFromMyList}
+                addMyList={addMyList}
+                />
+            ))
+            }
+        </div>
+        <div className='row justify-content-center'>
+            { tvShows.map(item => (
+                <Card 
+                key={item.id}
+                data={item}
+                myList={myList}
+                setMyList={setMyList}
+                removeFromMyList={removeFromMyList}
+                addMyList={addMyList}
+                />
+            ))
+            }
         </div>
     </div>
   )

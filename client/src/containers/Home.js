@@ -3,17 +3,15 @@ import React from 'react'
 import Movie from './Movie'
 import TvShow from './TvShow'
 
-const Home = ({ search, setSearch }) => {
+const Home = ({ myList, setMyList }) => {
 
   return (
     <div>
       <div className='row'>
-        <h1>Movies</h1>
-        <Movie search={search} setSearch={setSearch}  />
+        <Movie myList={myList} setMyList={setMyList} />
       </div>
       <div className='row'>
-        <h1>Tv Shows</h1>
-        <TvShow search={search} setSearch={setSearch} />
+        <TvShow myList={myList} setMyList={setMyList} />
       </div>
     </div>
   )

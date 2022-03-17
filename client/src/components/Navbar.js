@@ -35,6 +35,7 @@ const Navbar = ({ search, setSearch }) => {
                         aria-label="Search" 
                         onInput={() => navigate('/search')}
                         onChange={(e) => setSearch(e.target.value)}
+                        value={search}
                     />
                 </form>
             </div>

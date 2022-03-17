@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 
 import fetchDataTvShow from '../utils/fetchTvShow'
 
-const TvShow = () => {
+import Card from '../components/Card'
+
+const TvShow = ({ myList, setMyList, addMyList, removeFromMyList }) => {
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -10,9 +12,8 @@ const TvShow = () => {
   const [topRated, setTopRated] = useState([])
   const [onTheAir, setOnTheAir] = useState([])
   const [airingToday, setAiringToday] = useState([])
-  const [tvShowSearched, setTvShowSearched] = useState([])
 
-  async function fetchTvShows(url, categories, api_key) {
+  async function fetchTvShows() {
 
     setLoading(true)
 
@@ -32,14 +33,6 @@ const TvShow = () => {
         setOnTheAir(result.jsonOnTheAir.results)
         setAiringToday(result.jsonAiringToday.results)
         
-        // if(search !== undefined && search.length > 0) {
-        //   searchAll()
-        // }
-
-        // if(search !== undefined && search.length === 0) {
-        //   setTvShowSearched([])
-        // }
-
         setLoading(false)
       }
 
@@ -48,20 +41,6 @@ const TvShow = () => {
     }
 
   }
-
-  // function searchAll() {
-  //   let test = []
-  //   let results = [] 
-    
-  //   test.push(popular.filter(item => item.name.toLowerCase().includes(search)))
-  //   test.push(onTheAir.filter(item => item.name.toLowerCase().includes(search)))
-  //   test.push(topRated.filter(item => item.name.toLowerCase().includes(search)))
-  //   test.push(airingToday.filter(item => item.name.toLowerCase().includes(search)))
-
-  //   test.forEach(items => items.forEach(item => results.push(item)))
-
-  //   setTvShowSearched(results)
-  // }
 
   useEffect(() => {
     let isMounted = true
@@ -80,47 +59,64 @@ const TvShow = () => {
     return <div>Loading...</div>
   }
 
-
-
   return (
-    <div>
-      <div className='row'>
-        <div className='col-3'>
-          <h1>Popular Tv Show</h1>
-          <ul>
-            { popular.map(item => (
-              <li key={item.id}>{`${item.id} ${item.name} ${item.first_air_date}`}</li>
-              ))
-            }
-          </ul>
-        </div>
-        <div className='col-3'>
-          <h1>Top Rated Tv Show</h1>
-          <ul>
-            { topRated.map(item => (
-              <li key={item.id}>{`${item.id} ${item.name} ${item.first_air_date}`}</li>
-              ))
-            }
-          </ul>
-        </div>
-        <div className='col-3'>
-          <h1>On The Air Tv Show</h1>
-          <ul>
-            { onTheAir.map(item => (
-              <li key={item.id}>{`${item.id} ${item.name} ${item.first_air_date}`}</li>
-              ))
-            }
-          </ul>
-        </div>
-        <div className='col-3'>
-          <h1>Airing Today Tv Show</h1>
-          <ul>
-            { airingToday.map(item => (
-              <li key={item.id}>{`${item.id} ${item.name} ${item.first_air_date}`}</li>
-              ))
-            }
-          </ul>
-        </div>
+    <div className='container-fluid mt-5'>
+      <h1>Tv Shows</h1>
+      <div className='row justify-content-center'>
+        <h1 className='text-center'>Popular Tv Show</h1>
+          { popular.map(item => (
+              <Card 
+                key={item.id}
+                data={item}
+                myList={myList}
+                setMyList={setMyList}
+                removeFromMyList={removeFromMyList}
+                addMyList={addMyList}
+            />
+            ))
+          }
+      </div>
+      <div className='row justify-content-center'>
+        <h1 className='text-center'>Top Rated</h1>
+        { topRated.map(item => (
+            <Card 
+              key={item.id}
+              data={item}
+              myList={myList}
+              setMyList={setMyList}
+              removeFromMyList={removeFromMyList}
+              addMyList={addMyList}
+          />
+          ))
+        }
+      </div>
+      <div className='row justify-content-center'>
+        <h1 className='text-center'>On The Air</h1>
+        { onTheAir.map(item => (
+            <Card 
+              key={item.id}
+              data={item}
+              myList={myList}
+              setMyList={setMyList}
+              removeFromMyList={removeFromMyList}
+              addMyList={addMyList}
+          />
+          ))
+        }
+      </div>
+      <div className='row justify-content-center'>
+        <h1 className='text-center'>Airing Today</h1>
+        { airingToday.map(item => (
+            <Card 
+              key={item.id}
+              data={item}
+              myList={myList}
+              setMyList={setMyList}
+              removeFromMyList={removeFromMyList}
+              addMyList={addMyList}
+          />
+          ))
+        }
       </div>
     </div>
   )
