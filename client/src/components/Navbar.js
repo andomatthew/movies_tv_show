@@ -1,7 +1,10 @@
 import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 
-const Navbar = () => {
+const Navbar = ({ search, setSearch }) => {
+
+    const navigate = useNavigate()
+
   return (
     <nav className='navbar navbar-expand-lg navbar-light bg-light'>
         <div className='container-fluid'>
@@ -25,7 +28,14 @@ const Navbar = () => {
                     </li>
                 </ul>
                 <form className='d-flex'>
-                    <input className='form-control me-2' type='search' placeholder={`Titles, Genres`} aria-label="Search" />
+                    <input 
+                        className='form-control me-2' 
+                        type='search' 
+                        placeholder={`Titles, Genres`} 
+                        aria-label="Search" 
+                        onInput={() => navigate('/search')}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
                 </form>
             </div>
         </div>

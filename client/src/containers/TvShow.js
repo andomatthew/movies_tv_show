@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+import fetchDataTvShow from '../utils/fetchTvShow'
+
 const TvShow = () => {
 
   const [error, setError] = useState(null)
@@ -8,49 +10,62 @@ const TvShow = () => {
   const [topRated, setTopRated] = useState([])
   const [onTheAir, setOnTheAir] = useState([])
   const [airingToday, setAiringToday] = useState([])
-
-  const api_key = '9ecb3f6a4566a585475ef747621c1482'
-  const url = 'https://api.themoviedb.org/3/tv'
-  const categories = ['popular', 'top_rated', 'on_the_air', 'airing_today']
+  const [tvShowSearched, setTvShowSearched] = useState([])
 
   async function fetchTvShows(url, categories, api_key) {
 
     setLoading(true)
 
     try {
-      const dataPopular = await fetch(`${url}/${categories[0]}?api_key=${api_key}`, { method: 'GET' })
-      const dataTopRated = await fetch(`${url}/${categories[1]}?api_key=${api_key}`, { method: 'GET' })
-      const dataOnTheAir = await fetch(`${url}/${categories[2]}?api_key=${api_key}`, { method: 'GET' })
-      const dataAiringToday = await fetch(`${url}/${categories[3]}?api_key=${api_key}`, { method: 'GET' })
-    
-      const jsonPopular = await dataPopular.json()
-      const jsonTopRated = await dataTopRated.json()
-      const jsonOnTheAir = await dataOnTheAir.json()
-      const jsonAiringToday = await dataAiringToday.json()
 
-    if(!dataPopular.ok || !dataTopRated.ok || !dataOnTheAir.ok || !dataAiringToday.ok) {
+      const result = await fetchDataTvShow()
+
+      if(!result.dataPopular.ok || !result.dataTopRated.ok || !result.dataOnTheAir.ok || !result.dataAiringToday.ok) {
       
-      let errorMessage = jsonPopular.status_message || jsonTopRated.status_message || jsonOnTheAir.status_message || jsonAiringToday.status_message
+        let errorMessage = result.jsonPopular.status_message || result.jsonTopRated.status_message || result.jsonOnTheAir.status_message || result.jsonAiringToday.status_message
       
-      setError(errorMessage)
-    }else {
-      
-      setPopular(jsonPopular.results)
-      setTopRated(jsonTopRated.results)
-      setOnTheAir(jsonOnTheAir.results)
-      setAiringToday(jsonAiringToday.results)
-    }
-    
-    setLoading(false)
-    }catch(err) {
+        setError(errorMessage)
+      }else {
+
+        setPopular(result.jsonPopular.results)
+        setTopRated(result.jsonTopRated.results)
+        setOnTheAir(result.jsonOnTheAir.results)
+        setAiringToday(result.jsonAiringToday.results)
+        
+        // if(search !== undefined && search.length > 0) {
+        //   searchAll()
+        // }
+
+        // if(search !== undefined && search.length === 0) {
+        //   setTvShowSearched([])
+        // }
+
+        setLoading(false)
+      }
+
+    } catch(err) {
       console.log(err)
     }
 
   }
 
+  // function searchAll() {
+  //   let test = []
+  //   let results = [] 
+    
+  //   test.push(popular.filter(item => item.name.toLowerCase().includes(search)))
+  //   test.push(onTheAir.filter(item => item.name.toLowerCase().includes(search)))
+  //   test.push(topRated.filter(item => item.name.toLowerCase().includes(search)))
+  //   test.push(airingToday.filter(item => item.name.toLowerCase().includes(search)))
+
+  //   test.forEach(items => items.forEach(item => results.push(item)))
+
+  //   setTvShowSearched(results)
+  // }
+
   useEffect(() => {
     let isMounted = true
-    fetchTvShows(url, categories, api_key)
+    fetchTvShows()
 
     return function cleanup() {
       isMounted = false
@@ -64,6 +79,9 @@ const TvShow = () => {
   if(loading) {
     return <div>Loading...</div>
   }
+
+
+
   return (
     <div>
       <div className='row'>

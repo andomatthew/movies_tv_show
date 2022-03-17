@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
+import fetchDataMovies from '../utils/fetchMovies'
 
-const Movie = () => {
+const Movie = ({ search, setSearch }) => {
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -9,55 +10,67 @@ const Movie = () => {
   const [upcoming, setUpcoming] = useState([])
   const [topRated, setTopRated] = useState([])
   const [nowPlaying, setNowPlaying] = useState([])
-
-  const api_key = '9ecb3f6a4566a585475ef747621c1482'
-  const url = 'https://api.themoviedb.org/3/movie'
-  const categories = ['popular', 'upcoming', 'top_rated', 'now_playing']
+  const [movieSearched, setMovieSearched] = useState([])
 
   async function fetchMovies(url, categories, api_key) {
 
     setLoading(true)
 
     try {
-      const dataPopular = await fetch(`${url}/${categories[0]}?api_key=${api_key}`, { method: 'GET' })
-      const dataUpcoming = await fetch(`${url}/${categories[1]}?api_key=${api_key}`, { method: 'GET' })
-      const dataTopRated = await fetch(`${url}/${categories[2]}?api_key=${api_key}`, { method: 'GET' })
-      const dataNowPlaying = await fetch(`${url}/${categories[3]}?api_key=${api_key}`, { method: 'GET' }) 
+
+      const result = await fetchDataMovies()
       
-      const jsonPopular = await dataPopular.json()
-      const jsonUpcoming = await dataUpcoming.json()
-      const jsonTopRated = await dataTopRated.json()
-      const jsonNowPlaying = await dataNowPlaying.json()
-      
-      if(!dataPopular.ok || !dataUpcoming.ok || !dataTopRated.ok || !dataNowPlaying.ok) {
+      if(!result.dataPopular.ok || !result.dataUpcoming.ok || !result.dataTopRated.ok || !result.dataNowPlaying.ok) {
         
-        let errorMessage = jsonPopular.status_message || jsonUpcoming.status_message || jsonTopRated.status_message || jsonNowPlaying.status_message
+        let errorMessage = result.jsonPopular.status_message || result.jsonUpcoming.status_message || result.jsonTopRated.status_message || result.jsonNowPlaying.status_message
         
         setError(errorMessage)
         setLoading(false)
       }else {
-        setPopular(jsonPopular.results)
-        setUpcoming(jsonUpcoming.results)
-        setTopRated(jsonTopRated.results)
-        setNowPlaying(jsonNowPlaying.results)
-        setLoading(false)
-      } 
 
+        setPopular(result.jsonPopular.results)
+        setUpcoming(result.jsonUpcoming.results)
+        setTopRated(result.jsonTopRated.results)
+        setNowPlaying(result.jsonNowPlaying.results)
+
+        // if(search !== undefined && search.length > 0) {
+        //   searchAll()
+        // }
+
+        // if(search !== undefined && search.length === 0) {
+        //   setMovieSearched([])
+        // }
+      } 
+      setLoading(false)
 
     } catch (err) {
       console.log(err)
     }
   }
 
+  // function searchAll() {
+  //   let test = []
+  //   let results = [] 
+    
+  //   test.push(popular.filter(item => item.title.toLowerCase().includes(search)))
+  //   test.push(upcoming.filter(item => item.title.toLowerCase().includes(search)))
+  //   test.push(topRated.filter(item => item.title.toLowerCase().includes(search)))
+  //   test.push(nowPlaying.filter(item => item.title.toLowerCase().includes(search)))
+
+  //   test.forEach(items => items.forEach(item => results.push(item)))
+
+  //   setMovieSearched(results)
+  // }
+
   useEffect(() => {
     let isMounted = true
-    fetchMovies(url, categories, api_key)
-  
+    
+    fetchMovies()
+        
     return function cleanup() {
       isMounted = false
     }
-  }, [])
-
+  }, [search])
 
   if (error) {
     return <div>Error: {error}</div>
@@ -65,7 +78,28 @@ const Movie = () => {
   
   if(loading) {
     return <div>Loading...</div>
-  } 
+  }
+  
+  if(movieSearched.length >= 1) {
+    return (
+      <div>
+        <div className='row'>
+          <div className='col-3'>
+            <h1>Movie Search Result</h1>
+            <ul>
+              {movieSearched.map(item => (
+                  <li key={item.id}>
+                    {`${item.id} ${item.title} ${item.release_date}`}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className='row'>
