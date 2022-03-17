@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import '../src/style/scss/custom.scss'
+import './style/css/index.css'
 
 import Layout from './components/Layout'
 

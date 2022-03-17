@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import Card from '../components/Card'
 
-const MyList = ({ myList, setMyList, removeFromMyList, addMyList }) => {
+const MyList = ({ myList, removeFromMyList, addMyList }) => {
   
 
   if(myList.length === 0) {
@@ -18,7 +18,6 @@ const MyList = ({ myList, setMyList, removeFromMyList, addMyList }) => {
                 key={item.id}
                 data={item}
                 myList={myList}
-                setMyList={setMyList}
                 removeFromMyList={removeFromMyList}
                 addMyList={addMyList}
               />

@@ -28,11 +28,11 @@ function App() {
     <div className="App">
       <Navbar search={search} setSearch={setSearch} />
       <Routes>
-        <Route path="/" element={<Home myList={myList} setMyList={setMyList} />} />
-        <Route path="/movies" element={<Movie myList={myList} setMyList={setMyList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
-        <Route path="/tv-shows" element={<TvShow myList={myList} setMyList={setMyList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
-        <Route path="/my-list" element={<MyList myList={myList} setMyList={setMyList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
-        <Route path="/search" element={<Search myList={myList} setMyList={setMyList} search={search} setSearch={setSearch} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/" element={<Home myList={myList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/movies" element={<Movie myList={myList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/tv-shows" element={<TvShow myList={myList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/my-list" element={<MyList myList={myList} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
+        <Route path="/search" element={<Search myList={myList} search={search} setSearch={setSearch} addMyList={addMyList} removeFromMyList={removeFromMyList} />} />
       </Routes>
     </div>
   );

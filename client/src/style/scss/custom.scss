@@ -1,5 +1,6 @@
 //override variable here
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-$grid-breakpoints: ( xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px );
+$font-family-base: "Inter", sans-serif;
 
 @import 'bootstrap/scss/bootstrap.scss';

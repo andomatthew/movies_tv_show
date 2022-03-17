@@ -6,7 +6,7 @@ const Navbar = ({ search, setSearch }) => {
     const navigate = useNavigate()
 
   return (
-    <nav className='navbar navbar-expand-lg navbar-light bg-light'>
+    <nav className='navbar navbar-expand-lg fixed-top navbar-light bg-light'>
         <div className='container-fluid'>
             <Link to='/' className='navbar-brand'>Navbar</Link>
             <button className='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#NavigationBar' aria-controls='NavigationBar' aria-expanded='false' aria-label='Toggle navigation'>

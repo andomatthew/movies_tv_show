@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import fetchDataMovies from '../utils/fetchMovies'
 import Card from '../components/Card'
 
-const Movie = ({ myList, setMyList, addMyList, removeFromMyList }) => {
+const Movie = ({ myList, addMyList, removeFromMyList }) => {
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -65,7 +65,6 @@ const Movie = ({ myList, setMyList, addMyList, removeFromMyList }) => {
                 key={item.id}
                 data={item}
                 myList={myList}
-                setMyList={setMyList}
                 removeFromMyList={removeFromMyList}
                 addMyList={addMyList}
               />
@@ -79,7 +78,6 @@ const Movie = ({ myList, setMyList, addMyList, removeFromMyList }) => {
               key={item.id}
               data={item}
               myList={myList}
-              setMyList={setMyList}
               removeFromMyList={removeFromMyList}
               addMyList={addMyList}
             />
@@ -93,7 +91,6 @@ const Movie = ({ myList, setMyList, addMyList, removeFromMyList }) => {
                 key={item.id}
                 data={item}
                 myList={myList}
-                setMyList={setMyList}
                 removeFromMyList={removeFromMyList}
                 addMyList={addMyList}
             />
@@ -107,7 +104,6 @@ const Movie = ({ myList, setMyList, addMyList, removeFromMyList }) => {
               key={item.id}
               data={item}
               myList={myList}
-              setMyList={setMyList}
               removeFromMyList={removeFromMyList}
               addMyList={addMyList}
             />

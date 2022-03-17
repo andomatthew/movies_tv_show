@@ -3,15 +3,15 @@ import React from 'react'
 import Movie from './Movie'
 import TvShow from './TvShow'
 
-const Home = ({ myList, setMyList }) => {
+const Home = ({ myList, addMyList, removeFromMyList }) => {
 
   return (
     <div>
       <div className='row'>
-        <Movie myList={myList} setMyList={setMyList} />
+        <Movie myList={myList} addMyList={addMyList} removeFromMyList={removeFromMyList} />
       </div>
       <div className='row'>
-        <TvShow myList={myList} setMyList={setMyList} />
+        <TvShow myList={myList} addMyList={addMyList} removeFromMyList={removeFromMyList} />
       </div>
     </div>
   )
