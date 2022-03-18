@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import '../src/style/scss/custom.scss'
 import './style/css/index.css'
+import '../node_modules/bootstrap/dist/js/bootstrap'
 
 import Layout from './components/Layout'
 

@@ -15,9 +15,9 @@ const Card = ({ data, myList, removeFromMyList, addMyList}) => {
             <p className='card-text'>{data.id}</p>
             {
                 myList.find((i) => i.id === data.id) ? 
-                <button type='button' className='btn btn-danger' onClick={()=>(removeFromMyList(data))} >x</button>
+                <button type='button' className='btn btn-secondary' onClick={()=>(removeFromMyList(data))} >Remove From My List</button>
                 :
-                <button type='button' className='btn btn-primary' onClick={() => (addMyList(data))} >+</button>    
+                <button type='button' className='btn btn-primary' onClick={() => (addMyList(data))} >Add To My List</button>    
             }
         </div>
     </div>

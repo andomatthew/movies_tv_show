@@ -1,3 +1,14 @@
 img {
     height: 100%;
 }
+
+.card {
+    background-color: black !important;
+    border: none !important;
+}
+
+.card-body {
+    background-color: black;
+    border: 1px solid #FF9E00;
+    border-radius: 10px;
+}

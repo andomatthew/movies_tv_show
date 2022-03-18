@@ -3,68 +3,27 @@ import React, { useState, useEffect } from 'react'
 import fetchDataTvShow from '../utils/fetchTvShow'
 
 import Card from '../components/Card'
+import Spinner from '../components/Spinner'
 
-const TvShow = ({ myList, setMyList, addMyList, removeFromMyList }) => {
-
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [popular, setPopular] = useState([])
-  const [topRated, setTopRated] = useState([])
-  const [onTheAir, setOnTheAir] = useState([])
-  const [airingToday, setAiringToday] = useState([])
-
-  async function fetchTvShows() {
-
-    setLoading(true)
-
-    try {
-
-      const result = await fetchDataTvShow()
-
-      if(!result.dataPopular.ok || !result.dataTopRated.ok || !result.dataOnTheAir.ok || !result.dataAiringToday.ok) {
-      
-        let errorMessage = result.jsonPopular.status_message || result.jsonTopRated.status_message || result.jsonOnTheAir.status_message || result.jsonAiringToday.status_message
-      
-        setError(errorMessage)
-      }else {
-
-        setPopular(result.jsonPopular.results)
-        setTopRated(result.jsonTopRated.results)
-        setOnTheAir(result.jsonOnTheAir.results)
-        setAiringToday(result.jsonAiringToday.results)
-        
-        setLoading(false)
-      }
-
-    } catch(err) {
-      console.log(err)
-    }
-
-  }
-
-  useEffect(() => {
-    let isMounted = true
-    fetchTvShows()
-
-    return function cleanup() {
-      isMounted = false
-    }
-  }, [])
-
+const TvShow = ({ myList, setMyList, addMyList, removeFromMyList, error, loading, popularTShow, topRatedTShow, airingToday, onTheAir }) => {
 
   if(error) {
     return <div>Error: ${error}</div>
   }
   if(loading) {
-    return <div>Loading...</div>
+    return (
+      <div className='container-fluid position-absolute start-50'>
+        <Spinner />
+      </div>
+    )
   }
 
   return (
-    <div className='container-fluid mt-5'>
+    <div className='container-fluid'>
       <h1>Tv Shows</h1>
       <div className='row justify-content-center'>
         <h1 className='text-center'>Popular Tv Show</h1>
-          { popular.map(item => (
+          { popularTShow.map(item => (
               <Card 
                 key={item.id}
                 data={item}
@@ -78,7 +37,7 @@ const TvShow = ({ myList, setMyList, addMyList, removeFromMyList }) => {
       </div>
       <div className='row justify-content-center'>
         <h1 className='text-center'>Top Rated</h1>
-        { topRated.map(item => (
+        { topRatedTShow.map(item => (
             <Card 
               key={item.id}
               data={item}

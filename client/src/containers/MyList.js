@@ -6,7 +6,11 @@ const MyList = ({ myList, removeFromMyList, addMyList }) => {
   
 
   if(myList.length === 0) {
-    return <div><h1>Your list still empty</h1></div>
+    return (
+      <div className='container'>
+        <h1 className='text-center'>List empty</h1>
+      </div>
+    )
   }
 
   return (
