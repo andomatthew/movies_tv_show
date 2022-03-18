@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import Navbar from './components/Navbar';
@@ -11,127 +11,129 @@ import MyList from './containers/MyList';
 import fetchDataMovies from './utils/fetchMovies';
 import fetchDataTvShow from './utils/fetchTvShow';
 
+
+const initialState = {
+  loading: false,
+  error: null,
+  search: '',
+  movies: {
+    popular: [],
+    upcoming: [],
+    topRated: [],
+    nowPlaying: []
+  },
+  tvShows: {
+    popular: [],
+    topRated: [],
+    onTheAir: [],
+    airingToday: []
+  },
+  myList: [],
+  searchedData: {
+    filteredMovies: [],
+    filteredTvShows: []
+  }
+}
+
+function reducer(state, action) {
+  switch(action.type) {
+    case 'loading':
+      return { ...state, loading: action.payload }
+    case 'error':
+      return { ...state, error: action.payload }
+    case 'fetchMovies':
+      return { ...state, movies: action.payload }
+    case 'fetchTvShows':
+      return { ...state, tvShows: action.payload }
+    default:
+      return { ...state }
+  }
+}
+
 function App() {
 
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const [search, setSearch] = useState('')
-  const [myList, setMyList] = useState([])
-  const [filteredMovies, setFilteredMovies] = useState([])
-  const [filteredTvShows, setFilteredTvShows] = useState([])
-  //movies
-  const [allMovies, setAllMovies] = useState([])
-  const [popular, setPopular] = useState([])
-  const [upcoming, setUpcoming] = useState([])
-  const [topRated, setTopRated] = useState([])
-  const [nowPlaying, setNowPlaying] = useState([])
-  //tvshows
-  const [allTvShow, setAllTvShow] = useState([])
-  const [popularTShow, setPopularTShow] = useState([])
-  const [topRatedTShow, setTopRatedTShow] = useState([])
-  const [onTheAir, setOnTheAir] = useState([])
-  const [airingToday, setAiringToday] = useState([])
-
-  
   async function fetchMovies() {
-    
     try {
-      setLoading(true)
+      dispatch({ type: 'loading', payload: true })
       const result = await fetchDataMovies()
-
       if(!result.dataPopular.ok || !result.dataUpcoming.ok || !result.dataTopRated.ok || !result.dataNowPlaying.ok) {
-        
         let errorMessage = result.jsonPopular.status_message || result.jsonUpcoming.status_message || result.jsonTopRated.status_message || result.jsonNowPlaying.status_message
-        
-        setError(errorMessage)
-        setLoading(false)
+        dispatch({ type: 'error', payload: errorMessage })
       }else {
-        const movies = result.jsonPopular.results.concat(result.jsonUpcoming.results, result.jsonTopRated.results, result.jsonNowPlaying.results) 
-
-        setPopular(result.jsonPopular.results)
-        setUpcoming(result.jsonUpcoming.results)
-        setTopRated(result.jsonTopRated.results)
-        setNowPlaying(result.jsonNowPlaying.results)
-        setAllMovies(movies)
+        const movies = {
+          popular: result.jsonPopular.results,
+          upcoming: result.jsonUpcoming.results,
+          topRated: result.jsonTopRated.results,
+          nowPlaying: result.jsonNowPlaying.results
+        }
+        dispatch({ type: 'fetchMovies', payload: movies })
       } 
-      setLoading(false)
+      dispatch({ type: 'loading', payload: false })
     } catch(err) {
-      setError(err.message)
+      dispatch({ type: 'error', payload: err.message })
+      dispatch({ type: 'loading', payload: false })
     }
-    
-    const result = await fetchDataMovies()
-
-
   }
 
   async function fetchTvShows() {
 
     try {
-      setLoading(true)
-      
+      dispatch({ type: 'loading', payload: true })
       const result = await fetchDataTvShow()
-
       if(!result.dataPopular.ok || !result.dataTopRated.ok || !result.dataOnTheAir.ok || !result.dataAiringToday.ok) {
-      
         let errorMessage = result.jsonPopular.status_message || result.jsonTopRated.status_message || result.jsonOnTheAir.status_message || result.jsonAiringToday.status_message
-      
-        setError(errorMessage)
-        setLoading(false)
+        dispatch({ type: 'error', payload: errorMessage })
       }else {
-
-        setPopularTShow(result.jsonPopular.results)
-        setTopRatedTShow(result.jsonTopRated.results)
-        setOnTheAir(result.jsonOnTheAir.results)
-        setAiringToday(result.jsonAiringToday.results)
-        
-        const tvShows = result.jsonPopular.results.concat(result.jsonTopRated.results, result.jsonOnTheAir.results, result.jsonAiringToday.results)
-      
-        setAllTvShow(tvShows)
+        const tvShows = {
+          popular: result.jsonPopular.results,
+          topRated: result.jsonTopRated.results,
+          onTheAir: result.jsonOnTheAir.results,
+          airingToday: result.jsonAiringToday.results
+        }
+        dispatch({ type: 'fetchTvShows', payload: tvShows })
       }
-      setLoading(false)
+      dispatch({ type: 'loading', payload: false })
     } catch(err) {
-      setError(err.message)
+      dispatch({ type: 'error', payload: err.message })
+      dispatch({ type: 'loading', payload: false })
     }
-
   }
   
-  function addMyList(item) {
+//   function addMyList(item) {
 
-    setMyList([...myList, item])
-  }
+//     setMyList([...myList, item])
+//   }
 
-  function removeFromMyList(item) {
+//   function removeFromMyList(item) {
 
-    setMyList(myList.filter(i => i.id !== item.id))
+//     setMyList(myList.filter(i => i.id !== item.id))
 
-  }
+//   }
 
-  function setSearchTerm(e) {
-    setSearch(e.target.value)
-    searchTitle()
-  }
+//   function setSearchTerm(e) {
+//     setSearch(e.target.value)
+//     searchTitle()
+//   }
 
-  function searchTitle() {
+//   function searchTitle() {
+//     let uniqMovies = [... new Map(allMovies.map(item => [item.id, item])).values()]
 
-    
-
-    let uniqMovies = [... new Map(allMovies.map(item => [item.id, item])).values()]
-
-    let uniqTvShows = [... new Map(allTvShow.map(item => [item.id, item])).values()]
+//     let uniqTvShows = [... new Map(allTvShow.map(item => [item.id, item])).values()]
 
 
-    let filteredUniqMovies = uniqMovies.filter(value => {
-      return value.title.toLowerCase().includes(search)
-    })
+//     let filteredUniqMovies = uniqMovies.filter(value => {
+//       return value.title.toLowerCase().includes(search)
+//     })
 
-    let filteredUniqTvShows = uniqTvShows.filter(value => {
-      return value.name.toLowerCase().includes(search)
-    })
+//     let filteredUniqTvShows = uniqTvShows.filter(value => {
+//       return value.name.toLowerCase().includes(search)
+//     })
 
-    setFilteredMovies(filteredUniqMovies)
-    setFilteredTvShows(filteredUniqTvShows)
-}
+//     setFilteredMovies(filteredUniqMovies)
+//     setFilteredTvShows(filteredUniqTvShows)
+// }
 
   useEffect(() => {
     fetchMovies()
@@ -141,77 +143,67 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar search={search} setSearch={setSearch} searchTitle={setSearchTerm} />
+      <Navbar 
+        search={state.search} 
+        // setSearch={setSearch} 
+        // searchTitle={setSearchTerm} 
+      />
       <Routes>
         <Route 
           path="/" 
           element={
             <Home 
-              loading={loading}
-              error={error}
-              popular={popular}
-              upcoming={upcoming}
-              topRated={topRated}
-              nowPlaying={nowPlaying}
-              popularTShow={popularTShow}
-              topRatedTShow={topRatedTShow}
-              onTheAir={onTheAir}
-              airingToday={airingToday}
-              myList={myList} 
-              addMyList={addMyList} 
-              removeFromMyList={removeFromMyList} 
+              loading={state.loading}
+              error={state.error}
+              movies={state.movies}
+              tvShows={state.tvShows}
+              myList={state.myList} 
+              // addMyList={addMyList} 
+              // removeFromMyList={removeFromMyList} 
             />} 
         />
         <Route 
             path="/movies" 
             element={
               <Movie 
-                loading={loading}
-                error={error}
-                popular={popular}
-                upcoming={upcoming}
-                topRated={topRated}
-                nowPlaying={nowPlaying}
-                myList={myList} 
-                addMyList={addMyList} 
-                removeFromMyList={removeFromMyList} 
+                loading={state.loading}
+                error={state.error}
+                movies={state.movies}
+                myList={state.myList} 
+                // addMyList={addMyList} 
+                // removeFromMyList={removeFromMyList} 
               />} 
         />
         <Route 
           path="/tv-shows" 
           element={
             <TvShow
-              loading={loading}
-              error={error}
-              popularTShow={popularTShow}
-              topRatedTShow={topRatedTShow}
-              onTheAir={onTheAir}
-              airingToday={airingToday}
-              myList={myList} 
-              addMyList={addMyList} 
-              removeFromMyList={removeFromMyList}
+              loading={state.loading}
+              error={state.error}
+              tvShows={state.tvShows}
+              myList={state.myList} 
+              // addMyList={addMyList} 
+              // removeFromMyList={removeFromMyList}
             />}
         />
         <Route 
           path="/my-list" 
           element={
             <MyList 
-              myList={myList} 
-              addMyList={addMyList} 
-              removeFromMyList={removeFromMyList}
+              myList={state.myList} 
+              // addMyList={addMyList} 
+              // removeFromMyList={removeFromMyList}
             />}
         />
         <Route 
           path="/search" 
           element={
             <Search 
-              allMovies={filteredMovies}
-              allTvShow={filteredTvShows}
-              myList={myList} 
-              search={search} 
-              setSearch={setSearch} 
-              addMyList={addMyList} 
-              removeFromMyList={removeFromMyList}
+              searchedData={state.searchedData}
+              myList={state.myList} 
+              search={state.search} 
+              // addMyList={addMyList} 
+              // removeFromMyList={removeFromMyList}
             />}
         />
       </Routes>
