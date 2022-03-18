@@ -45,6 +45,10 @@ function reducer(state, action) {
       return { ...state, movies: action.payload }
     case 'fetchTvShows':
       return { ...state, tvShows: action.payload }
+    case 'addMyList':
+      return { ...state, myList: action.payload }
+    case 'removeFromMyList':
+      return { ...state, myList: action.payload }
     default:
       return { ...state }
   }
@@ -101,16 +105,23 @@ function App() {
     }
   }
   
-//   function addMyList(item) {
+  function addMyList(item) {
 
-//     setMyList([...myList, item])
-//   }
+    let currentList = [...state.myList]
+    let updatedList = [...currentList, item]
+    dispatch({ type: 'addMyList', payload: updatedList })
 
-//   function removeFromMyList(item) {
+  }
 
-//     setMyList(myList.filter(i => i.id !== item.id))
+  function removeFromMyList(item) {
+    console.log('masuk remove', item)
+    let currentList = [...state.myList]
 
-//   }
+    let updatedList = currentList.filter(e => e.id !== item.id)
+
+    dispatch({ type: 'removeFromMyList', payload: updatedList })
+
+  }
 
 //   function setSearchTerm(e) {
 //     setSearch(e.target.value)
@@ -158,8 +169,8 @@ function App() {
               movies={state.movies}
               tvShows={state.tvShows}
               myList={state.myList} 
-              // addMyList={addMyList} 
-              // removeFromMyList={removeFromMyList} 
+              addMyList={addMyList} 
+              removeFromMyList={removeFromMyList} 
             />} 
         />
         <Route 
@@ -170,8 +181,8 @@ function App() {
                 error={state.error}
                 movies={state.movies}
                 myList={state.myList} 
-                // addMyList={addMyList} 
-                // removeFromMyList={removeFromMyList} 
+                addMyList={addMyList} 
+                removeFromMyList={removeFromMyList} 
               />} 
         />
         <Route 
@@ -182,8 +193,8 @@ function App() {
               error={state.error}
               tvShows={state.tvShows}
               myList={state.myList} 
-              // addMyList={addMyList} 
-              // removeFromMyList={removeFromMyList}
+              addMyList={addMyList} 
+              removeFromMyList={removeFromMyList}
             />}
         />
         <Route 
@@ -191,8 +202,8 @@ function App() {
           element={
             <MyList 
               myList={state.myList} 
-              // addMyList={addMyList} 
-              // removeFromMyList={removeFromMyList}
+              addMyList={addMyList} 
+              removeFromMyList={removeFromMyList}
             />}
         />
         <Route 
@@ -202,8 +213,8 @@ function App() {
               searchedData={state.searchedData}
               myList={state.myList} 
               search={state.search} 
-              // addMyList={addMyList} 
-              // removeFromMyList={removeFromMyList}
+              addMyList={addMyList} 
+              removeFromMyList={removeFromMyList}
             />}
         />
       </Routes>
