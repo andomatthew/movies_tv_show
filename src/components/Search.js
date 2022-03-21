@@ -6,29 +6,26 @@ import fetchDataTvShow from '../utils/fetchTvShow'
 
 import Card from './Card'
 
-const Search = ({ search, myList, addMyList, removeFromMyList, searchedData }) => {
+const Search = ({ search, setSearch,myList, setMyList, addMyList, removeFromMyList, allMovies, allTvShow }) => {
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        let isMounted = true
         if(search.length === 0) {
             navigate('/')
         }
-        return () => isMounted = false
     }, [search])
-
-    console.log(search, 'search di search.js')
 
     return (
     <div className='container-fluid mt-5'>
-        <h1>Searched Data</h1>
+        <h1>Searched Data Movies</h1>
         <div className='row justify-content-center'>
-            { searchedData.filteredMovies.map(item => (
+            { allMovies.map(item => (
                 <Card 
                 key={item.id}
                 data={item}
                 myList={myList}
+                setMyList={setMyList}
                 removeFromMyList={removeFromMyList}
                 addMyList={addMyList}
                 />
@@ -36,11 +33,12 @@ const Search = ({ search, myList, addMyList, removeFromMyList, searchedData }) =
             }
         </div>
         <div className='row justify-content-center'>
-            { searchedData.filteredTvShows.map(item => (
+            { allTvShow.map(item => (
                 <Card 
                 key={item.id}
                 data={item}
                 myList={myList}
+                setMyList={setMyList}
                 removeFromMyList={removeFromMyList}
                 addMyList={addMyList}
                 />

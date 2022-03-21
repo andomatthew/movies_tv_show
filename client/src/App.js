@@ -49,6 +49,10 @@ function reducer(state, action) {
       return { ...state, myList: action.payload }
     case 'removeFromMyList':
       return { ...state, myList: action.payload }
+    case 'searching':
+      return { ...state, search: action.payload }
+    case 'filtering':
+      return { ...state, searchedData: action.payload }
     default:
       return { ...state }
   }
@@ -57,6 +61,7 @@ function reducer(state, action) {
 function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [search, setSearch] = useState('')
 
   async function fetchMovies() {
     try {
@@ -114,7 +119,6 @@ function App() {
   }
 
   function removeFromMyList(item) {
-    console.log('masuk remove', item)
     let currentList = [...state.myList]
 
     let updatedList = currentList.filter(e => e.id !== item.id)
@@ -123,41 +127,60 @@ function App() {
 
   }
 
-//   function setSearchTerm(e) {
-//     setSearch(e.target.value)
-//     searchTitle()
-//   }
+  function setSearchTerm(e) {
+    //setSearch(e.target.value)
+    dispatch({ type: 'searching', payload: e })
+    searchTitle()
+  }
 
-//   function searchTitle() {
-//     let uniqMovies = [... new Map(allMovies.map(item => [item.id, item])).values()]
+  function searchTitle() {
+    console.log('masuk search title')
+    const allMovies = {  ...state.movies }
+    const allTvShows = { ...state.tvShows } 
+    let allMoviesInArray = []
+    let allTvShowsInArray= []
+    for(const property in  allMovies) {
+      
+      for(let i = 0; i < allMovies[property].length; i++) {
+        allMoviesInArray.push(allMovies[property][i])
+      }
+    }
 
-//     let uniqTvShows = [... new Map(allTvShow.map(item => [item.id, item])).values()]
+    for(const property in allTvShows) {
+      
+      for(let i = 0; i< allTvShows[property].length; i++) {
+        allTvShowsInArray.push(allTvShows[property][i])
+      }
 
+    }
+    
+    let uniqMovies = [ ...new Map(allMoviesInArray.map(item => [ item.id, item ])).values()]
+    let uniqTvShows = [ ...new Map(allTvShowsInArray.map(item => [ item.id, item ])).values() ]
 
-//     let filteredUniqMovies = uniqMovies.filter(value => {
-//       return value.title.toLowerCase().includes(search)
-//     })
+    let filteredMovies = uniqMovies.filter(value => {
+      return value.title.toLowerCase().includes(search)
+    })
 
-//     let filteredUniqTvShows = uniqTvShows.filter(value => {
-//       return value.name.toLowerCase().includes(search)
-//     })
+    console.log(filteredMovies)
 
-//     setFilteredMovies(filteredUniqMovies)
-//     setFilteredTvShows(filteredUniqTvShows)
-// }
+    let filteredTvShows = uniqTvShows.filter(value => {
+      return value.name.toLowerCase().includes(search)
+    })
+
+    dispatch({ type: 'filtering', payload: { filteredMovies, filteredTvShows } })
+}
 
   useEffect(() => {
     fetchMovies()
     fetchTvShows()
   },[])
 
-
   return (
     <div className="App">
       <Navbar 
-        search={state.search} 
-        // setSearch={setSearch} 
-        // searchTitle={setSearchTerm} 
+        search={state.search}  
+        setSearch={setSearch}
+        searchTitle={setSearchTerm} 
       />
       <Routes>
         <Route 
@@ -212,7 +235,7 @@ function App() {
             <Search 
               searchedData={state.searchedData}
               myList={state.myList} 
-              search={state.search} 
+              search={search} 
               addMyList={addMyList} 
               removeFromMyList={removeFromMyList}
             />}

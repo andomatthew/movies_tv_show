@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 
 import './Navbar.css'
@@ -6,16 +6,6 @@ import './Navbar.css'
 const Navbar = ({ search, setSearch, searchTitle }) => {
 
     const navigate = useNavigate()
-
-    const [searchTerm, setSearchTerm] = useState('')
-
-    function passingSearch(e) {
-        e.preventDefault()
-        setSearchTerm(e.target.value)
-        setSearch(e.target.value)
-        searchTitle()
-    }
-
 
   return (
     <>
@@ -43,12 +33,12 @@ const Navbar = ({ search, setSearch, searchTitle }) => {
                     <form className='d-flex position-absolute end-0'>
                         <input 
                             className='form-control me-2 bg-dark color-white' 
-                            type='text' 
+                            type='search' 
                             placeholder={`Titles, Genres`} 
                             aria-label="Search" 
                             onInput={() => navigate('/search')}
-                            onChange={(e) => passingSearch(e)}
-                            value={searchTerm}
+                            onChange={(e) => searchTitle(e)}
+                            value={search}
                         />
                     </form>
                 </div>

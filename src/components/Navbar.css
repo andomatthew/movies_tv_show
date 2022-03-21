@@ -1,0 +1,11 @@
+.spacing {
+    height: 64px;
+}
+
+.form-control {
+    border-color: #9719ff !important;
+}
+
+::placeholder, input {
+    color: #ff9300 !important;
+}
