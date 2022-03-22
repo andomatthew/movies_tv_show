@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { Routes, Route, useNavigate, useLocation, useSearchParams, createSearchParams} from 'react-router-dom'
 
 import Navbar from './components/Navbar';
 import Search from './components/Search';
@@ -32,7 +32,8 @@ const initialState = {
   searchedData: {
     filteredMovies: [],
     filteredTvShows: []
-  }
+  },
+  pathName: null
 }
 
 function reducer(state, action) {
@@ -53,6 +54,8 @@ function reducer(state, action) {
       return { ...state, search: action.payload }
     case 'filtering':
       return { ...state, searchedData: action.payload }
+    case 'setPathName':
+      return { ...state, pathName: action.payload }
     default:
       return { ...state }
   }
@@ -62,8 +65,11 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const [search, setSearch] = useState('')
+  const [firstSearch, setFirstSearch] = useState(true)
+
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   async function fetchMovies() {
     try {
@@ -131,9 +137,17 @@ function App() {
 
   function setSearchTerm(e) {
     dispatch({ type: 'searching', payload: e })
-
-    if(location.state === null) {
-      navigate('/search', { state: 'search' })
+    if(e.length === 1 && firstSearch === true) {
+      dispatch({ type: 'setPathName', payload: location.pathname })
+      navigate({
+        pathname: '/search',
+        search: createSearchParams({
+          q: e
+        }).toString()
+      })
+      setFirstSearch(false)
+    } else {
+      setSearchParams({ q: e })
     }
     searchTitle()
   }
@@ -165,8 +179,6 @@ function App() {
       return value.title.toLowerCase().includes(search)
     })
 
-    console.log(filteredMovies)
-
     let filteredTvShows = uniqTvShows.filter(value => {
       return value.name.toLowerCase().includes(search)
     })
@@ -179,8 +191,6 @@ function App() {
     fetchTvShows()
   },[])
   
-
-  console.log(location.state)
   return (
     <div className="App">
       <Navbar 
@@ -239,11 +249,13 @@ function App() {
           path="/search" 
           element={
             <Search 
+              pathName={state.pathName}
               searchedData={state.searchedData}
               myList={state.myList} 
               search={search} 
               addMyList={addMyList} 
               removeFromMyList={removeFromMyList}
+              setFirstSearch={setFirstSearch}
             />}
         />
       </Routes>

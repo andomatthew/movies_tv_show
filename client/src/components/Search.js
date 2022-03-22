@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useLocation } from 'react-router-dom'
 
 import fetchDataMovies from '../utils/fetchMovies'
 import fetchDataTvShow from '../utils/fetchTvShow'
 
 import Card from './Card'
 
-const Search = ({ search, myList, addMyList, removeFromMyList, searchedData }) => {
+const Search = ({ search, myList, addMyList, removeFromMyList, searchedData, pathName, setFirstSearch }) => {
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         let isMounted = true
-        
         if(search.length === 0) {
-            navigate(-1)
+            setFirstSearch(true)
+            navigate(`${pathName}`)
         }
         return () => isMounted = false
     }, [search])
-
-    console.log(search, 'search di search.js')
 
     return (
     <div className='container-fluid mt-5'>

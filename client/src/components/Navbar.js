@@ -10,7 +10,7 @@ const Navbar = ({ search, setSearch, searchTitle }) => {
         e.preventDefault()
         setSearchTerm(e.target.value)
         setSearch(e.target.value)
-        searchTitle()
+        searchTitle(e.target.value)
     }
 
   return (
