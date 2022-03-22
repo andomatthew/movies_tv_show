@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import Movie from './Movie'
 import TvShow from './TvShow'
 
 const Home = ({ myList, addMyList, removeFromMyList, loading, error, movies, tvShows }) => {
+
+
+  const location = useLocation()
 
   return (
     <div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 
 import Navbar from './components/Navbar';
 import Search from './components/Search';
@@ -62,6 +62,8 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const [search, setSearch] = useState('')
+  const navigate = useNavigate()
+  const location = useLocation()
 
   async function fetchMovies() {
     try {
@@ -128,13 +130,15 @@ function App() {
   }
 
   function setSearchTerm(e) {
-    //setSearch(e.target.value)
     dispatch({ type: 'searching', payload: e })
+
+    if(location.state === null) {
+      navigate('/search', { state: 'search' })
+    }
     searchTitle()
   }
 
   function searchTitle() {
-    console.log('masuk search title')
     const allMovies = {  ...state.movies }
     const allTvShows = { ...state.tvShows } 
     let allMoviesInArray = []
@@ -174,7 +178,9 @@ function App() {
     fetchMovies()
     fetchTvShows()
   },[])
+  
 
+  console.log(location.state)
   return (
     <div className="App">
       <Navbar 

@@ -4,7 +4,6 @@ import Card from '../components/Card'
 import Spinner from '../components/Spinner'
 
 const Movie = ({ myList, addMyList, removeFromMyList, loading, error, movies }) => {
-  
 
   if (error) {
     return <div>Error: {error}</div>

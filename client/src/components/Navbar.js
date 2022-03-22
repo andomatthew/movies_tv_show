@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Routes, Route, Link } from 'react-router-dom'
 
 import './Navbar.css'
 
 const Navbar = ({ search, setSearch, searchTitle }) => {
-
-    const navigate = useNavigate()
-
     const [searchTerm, setSearchTerm] = useState('')
 
     function passingSearch(e) {
@@ -15,7 +12,6 @@ const Navbar = ({ search, setSearch, searchTitle }) => {
         setSearch(e.target.value)
         searchTitle()
     }
-
 
   return (
     <>
@@ -46,7 +42,6 @@ const Navbar = ({ search, setSearch, searchTitle }) => {
                             type='text' 
                             placeholder={`Titles, Genres`} 
                             aria-label="Search" 
-                            onInput={() => navigate('/search')}
                             onChange={(e) => passingSearch(e)}
                             value={searchTerm}
                         />

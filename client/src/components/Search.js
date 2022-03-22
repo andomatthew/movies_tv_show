@@ -12,8 +12,9 @@ const Search = ({ search, myList, addMyList, removeFromMyList, searchedData }) =
 
     useEffect(() => {
         let isMounted = true
+        
         if(search.length === 0) {
-            navigate('/')
+            navigate(-1)
         }
         return () => isMounted = false
     }, [search])
