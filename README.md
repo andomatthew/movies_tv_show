@@ -7,3 +7,4 @@ Install program untuk dijalankan di local:
 3. Pastikan directory berada di folder _client_
 4. Lakukan npm install
 5. Jalankan command npm start
+6. Explore Aplikasi
