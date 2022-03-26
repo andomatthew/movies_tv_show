@@ -11,13 +11,25 @@ const Search = ({ search, myList, addMyList, removeFromMyList, searchedData, pat
     const navigate = useNavigate()
     const location = useLocation()
 
+    function subscribe() {
+        return true
+    }
+
+    function unsubscribe() {
+        return false
+    }
+
     useEffect(() => {
-        let isMounted = true
+        console.log('use effect search')
+        subscribe()
         if(search.length === 0) {
             setFirstSearch(true)
             navigate(`${pathName}`)
         }
-        return () => isMounted = false
+        return () => {
+            console.log('return function here')
+            unsubscribe()
+        }
     }, [search])
 
     return (
